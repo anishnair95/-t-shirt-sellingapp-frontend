@@ -4,18 +4,21 @@ import { API } from "../../backend";
 // Call API function
 
 export const signup = (user) => {
-  return fetch(`${API}/signup`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  })
-    .then((response) => {
-      return response.json();
+  return (
+    fetch(`${API}/signup`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
     })
-    .catch((err) => console.log(err));
+      //need to enhance to handle array of error [ {"error":"error","field:"error"},{"error":"error","field:"error"}]
+      .then((response) => {
+        return response.json();
+      })
+      .catch((err) => console.log(err))
+  );
 };
 
 export const signin = (user) => {
@@ -48,7 +51,7 @@ export const authenticate = (data, next) => {
 export const signout = (next) => {
   if (typeof window !== "undefined") {
     //we will remove the jwt from storage
-    localStorage.removeItem("jwt", JSON.stringify(data));
+    localStorage.removeItem("jwt");
     next();
 
     return fetch(`${API}/signout`, {
